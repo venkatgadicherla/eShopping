@@ -10,6 +10,10 @@ class Product(models.Model):
     image = models.ImageField(upload_to='uploads/products/')
 
     @staticmethod
+    def get_product_by_id(product_ids):
+       product_list=Product.objects.filter(id__in=product_ids)
+       return product_list
+    @staticmethod
     def get_all_products():
         return Product.objects.all()
 

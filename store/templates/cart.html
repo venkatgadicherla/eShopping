@@ -1,0 +1,37 @@
+{% extends 'base.html' %} 
+{% block content %}
+
+{% load cart%}
+<div class="container">
+<h1>Cart</h1>
+<div class="border rounded p-4 m-4">
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Product</th>
+        <th scope="col">Price</th>
+        <th scope="col">No Of Items</th>
+        <th scope="col">Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for product in products%}
+      <tr>
+        <td >{{forloop.counter}}</td>
+        <th><img style="height:80px ;" class='rounded-circle' src="{{product.image.url}}"/></th>
+        <td>{{product.name}}</td>
+        <td>{{product.price}}</td>
+        <td>{{product|quantity_in_cart:request.session.cart}}</td>
+        <td>{{product|product_items_cost:request.session.cart}}</td>
+      </tr>
+      
+     {% endfor %}
+     <tr>
+        <th colspan="5">Total</th>
+        <th>{{products|cart_cost:request.session.cart}}</th>
+      </tr>
+    </tbody>
+  </table>
+</div></div>
+ {% endblock %}

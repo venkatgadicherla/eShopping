@@ -10,3 +10,18 @@ class Customer(models.Model):
 
     def register(self):
         self.save()
+    def isExists(self):
+        if Customer.objects.filter(email=self.email):
+            print(Customer.objects.filter(email=self.email))
+            
+            return  
+       
+        return False
+    @staticmethod
+    def getCustomer(email):
+        try:
+            if Customer.objects.get(email=email):
+            
+                return Customer.objects.get(email=email)
+        except:
+            False 

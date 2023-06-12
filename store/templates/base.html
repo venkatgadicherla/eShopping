@@ -4,6 +4,10 @@
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script
+        src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
+        crossorigin="anonymous"></script>
 
     <!-- Bootstrap CSS -->
     <link
@@ -22,12 +26,12 @@
       }
     </style>
 
-    <title>Hello, world!</title>
+    <title>San'sMart</title>
   </head>
   <body>
     <!-- navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#"><b> ShoppingCart</b></a>
+      <a class="navbar-brand" href="/"><b> ShoppingCart</b></a>
       <button
         class="navbar-toggler"
         type="button"
@@ -39,29 +43,54 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
+      {% if  request.session.customer_id %}
       <ul class="navbar-nav m1-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#">Store <span class="sr-only"></span></a>
+          <a class="nav-link" href="/">Welcome {{request.session.customer_email }} <span class="sr-only"></span></a>
         </li>
       </ul>
+      {%else %}
+      <ul class="navbar-nav m1-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Welcome <span class="sr-only"></span></a>
+        </li>
+      </ul>
+      {% endif %}
+     
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent"> 
+        
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="#">
-              Logout <span class="sr-only"></span
+            <a class="nav-link" href="/cart">
+              Cart <span class="sr-only"></span
             ></a>
           </li>
+          {% if not request.session.customer_id %} 
+          
           <li class="nav-item">
             <a class="nav-link" href="/signup">
               Signup <span class="sr-only"></span
             ></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              Login <span class="sr-only"></span
+          {% endif %}
+          
+          {% if  request.session.customer_id %}
+            <li class="nav-item">
+              <form action="logout" method="post">
+                {% csrf_token %}
+              <input type="submit" class="btn nav-link" href="/logout" value="Logout">
+                 <span class="sr-only"></span></a>
+              </form>
+            </li>
+          {% else %}
+            <li class="nav-item">
+               <a class="nav-link" href="/login">
+                Login <span class="sr-only"></span
             ></a>
-          </li>
+            </li>
+          {% endif %}
+          
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
@@ -83,6 +112,20 @@
         </ul>
       </div>
     </nav>
+    <div class="container">
+      {% if messages %}
+       {% for message in messages%}
+       <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message}}
+        <button type="button" class="close"  data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+       {% endfor %}
+      {% endif %}
+
+    </div>
 
     {% block content %} {% endblock %}
 

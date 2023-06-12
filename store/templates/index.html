@@ -3,6 +3,7 @@
 <!-- body -->
 
 {% block content %}
+{% load cart%}
 
 <div class="container-fluid mt-3">
   <div class="row">
@@ -26,12 +27,45 @@
     <div id="products" class="col-lg-9 mx-auto">
       <div class="row mx-auto">
         {% for product in products %}
-        <div class="card mx-auto mb-5" style="width: 18rem">
+        <div id="{{product.id}}"class="card mx-auto mb-5" style="width: 18rem">
           <img src="{{product.image.url}}" class="card-img-top" alt="..." />
           <div class="card-body">
             <p class="card-title">{{product.name}}</p>
             <p class="card-text"><b>{{product.price}}</b></p>
-            <a href="#" class="btn btn-light border btn-sm">Add To Cart</a>
+           
+           
+          </div>
+      <div class="card-footer p-0 row no-gutters btn-block"> 
+         {% if request.session.cart and product|is_in_cart:request.session.cart  %}
+            
+                                   
+         <div class="class row  no-gutters" >
+               <form action="/#{{product.id}}" method="post" class="col-2">
+              {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{product.id}}"/>
+                <input type="hidden" name="customer_id" value="{{request.session.customer_id}}"/>
+                <input type="hidden" name="remove" value="true">
+                <input type="submit" name='remove'class=" btn btn-block btn-secondary "  value=" - ">
+             </form> 
+             <div class="text-center col">{{ product|quantity_in_cart:request.session.cart }}</div>
+            <form action="/#{{product.id}}" method="post" class="col-2">
+                  {% csrf_token %}
+                 <input type="hidden" name="product_id"value="{{product.id}}"/>
+                 <input type="hidden" name="customer_id" value="{{request.session.customer_id}}"/>
+                 <input type="submit"   class="btn btn-block btn-secondary" value=" + ">
+            </form>
+         </div>
+        {% else %} 
+            <form action="/#{{product.id}} " method="POST" id="addtocart" class="btn-block">
+              {% csrf_token %}
+              <input type="hidden" id="product_id" name="product_id"value="{{product.id}}"/>
+              <input type="hidden" id="customer_id" name="customer_id" value="{{request.session.customer_id}}"/>
+              <input type="submit"  class="btn btn-light border form-control" value="Add To Cart"></input>
+            </form>   
+         {% endif %}
+              
+        
+            
           </div>
         </div>
 
@@ -40,5 +74,28 @@
     </div>
   </div>
 </div>
-
 {% endblock %}
+<!-- {% block javascript %}
+<script type="text/javascript">
+  $('#addtocart').submit( function(e)
+  {
+    e.preventDefault();
+    $ajax({
+      type:"POST",
+      url:"/",
+      data:{
+        product_id:$('#product_id').val(),
+        customer_id:$('#customer_id').val(),
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+        },
+        success:function()
+        {
+
+        }
+
+    });
+  })
+  
+</script>
+{% endblock javascript %} -->
+

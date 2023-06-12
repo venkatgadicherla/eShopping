@@ -16,8 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import index, signup
+from .Views.home import Home
+from .Views.login import Login
+from .Views.signup import Singup
+from .Views.logout import Logout
+from .Views.cart import Cart
 urlpatterns = [
-    path("", index),
-    path('signup', signup)
+    path("", Home.as_view()),
+    path('signup', Singup.as_view()),
+    path('login',Login.as_view()),
+    path('logout',Logout.as_view()),
+    path('cart',Cart.as_view()),
+   
+  
+   
 ]
