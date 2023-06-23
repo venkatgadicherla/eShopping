@@ -2,6 +2,7 @@
 {% block content %}
 
 {% load cart%}
+{% load custom_filter%}
 <div class="container">
 <h1>Cart</h1>
 <div class="border rounded p-4 m-4">
@@ -9,10 +10,10 @@
     <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Product</th>
-        <th scope="col">Price</th>
-        <th scope="col">No Of Items</th>
-        <th scope="col">Subtotal</th>
+        <th scope="col" colspan="2">Product</th>
+        <th scope="col" style="text-align: right;">Price</th>
+        <th scope="col" style="text-align: right;" >No Of Items</th>
+        <th scope="col" style="text-align: right;">Subtotal</th>
       </tr>
     </thead>
     <tbody>
@@ -21,15 +22,15 @@
         <td >{{forloop.counter}}</td>
         <th><img style="height:80px ;" class='rounded-circle' src="{{product.image.url}}"/></th>
         <td>{{product.name}}</td>
-        <td>{{product.price}}</td>
-        <td>{{product|quantity_in_cart:request.session.cart}}</td>
-        <td>{{product|product_items_cost:request.session.cart}}</td>
+        <td style="text-align: right;">{{product.price|currency}}</td>
+        <td style="text-align: right;">{{product|quantity_in_cart:request.session.cart}}</td>
+        <td style="text-align: right;">{{product|product_items_cost:request.session.cart|currency}}</td>
       </tr>
       
      {% endfor %}
      <tr>
         <th colspan="5">Total</th>
-        <th>{{products|cart_cost:request.session.cart}}</th>
+        <th>{{products|cart_cost:request.session.cart|currency}}</th>
       </tr>
     </tbody>
   </table>
